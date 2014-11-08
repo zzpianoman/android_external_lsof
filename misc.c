@@ -1431,7 +1431,7 @@ safestrprt(sp, fs, flags)
 
 #if	defined(HASWIDECHAR)
 		if (wcmx > 1) {
-		    lnc = mblen(sp, sl);
+		    lnc = mbtowc(0, sp, sl);
 		    if (lnc > 1) {
 			if ((mbtowc(&w, sp, sl) == lnc) && iswprint(w)) {
 			    for (lnt = 0; lnt < lnc; lnt++) {
