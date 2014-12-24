@@ -117,7 +117,20 @@ _PROTOTYPE(extern char *gethostnm,(unsigned char *ia, int af));
  * selects getdtablesize().
  */
 
+#ifdef __LP64__
+// getdtablesize was removed from POSIX 2004. Bionic only has it on ARM
+static int GET_MAX_FD() {
+  struct rlimit r;
+
+  if (getrlimit(RLIMIT_NOFILE, &r) < 0) {
+    return sysconf(_SC_OPEN_MAX);
+  }
+
+  return r.rlim_cur;
+}
+#else
 #define	GET_MAX_FD	getdtablesize
+#endif
 # endif	/* !defined(GET_MAX_FD) */
 
 _PROTOTYPE(extern int hashbyname,(char *nm, int mod));
